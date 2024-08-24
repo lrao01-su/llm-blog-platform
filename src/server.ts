@@ -2,24 +2,22 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import blogRoutes from './routes/blogRoutes';
 
-// Load environment variables
 dotenv.config();
 
-// Create Express app
 const app: Express = express();
-
-// Middleware
+const PORT: string | number = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-// Define a simple route
+// Use blog routes
+app.use('/api/posts', blogRoutes);
+
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Welcome to the Blog Generator API' });
 });
 
-// Set port and start the server
-const PORT: string | number = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
