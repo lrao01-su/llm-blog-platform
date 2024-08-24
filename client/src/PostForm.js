@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function PostForm() {
+function PostForm({onPostCreated}) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -18,6 +18,7 @@ function PostForm() {
         console.log('Success:', data);
         setTitle('');
         setContent('');
+        onPostCreated(data);
       })
       .catch((error) => {
         console.error('Error:', error);

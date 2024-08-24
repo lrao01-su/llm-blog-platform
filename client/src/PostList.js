@@ -1,15 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-function PostList() {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetch('http://localhost:5001/api/posts')
-      .then(response => response.json())
-      .then(data => setPosts(data))
-      .catch(error => console.error('Error:', error));
-  }, []);
-
+function PostList({ posts }) {
   return (
     <div>
       <h2>Blog Posts</h2>
