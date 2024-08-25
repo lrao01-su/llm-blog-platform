@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
 
-function PostForm({onPostCreated}) {
+function PostForm({ onPostCreated }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch('http://localhost:5001/api/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title, content }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        setTitle('');
-        setContent('');
-        onPostCreated(data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
+    try {
+      const response = await fetch('http://localhost:5001/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content }),
       });
+      const data = await response.json();
+      onPostCreated(data);
+      setTitle('');
+      setContent('');
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
 
   return (

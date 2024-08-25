@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PostList from './PostList';
 import PostForm from './PostForm';
+import GeneratePostForm from './GeneratePostForm';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -9,22 +10,34 @@ function App() {
     fetchPosts();
   }, []);
 
-  const fetchPosts = () => {
-    fetch('http://localhost:5001/api/posts')
-      .then(response => response.json())
-      .then(data => setPosts(data))
-      .catch(error => console.error('Error:', error));
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/posts');
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
   };
 
   const handlePostCreated = (newPost) => {
     setPosts([newPost, ...posts]);
   };
 
+  const handlePostGenerated = (newPost) => {
+    setPosts([newPost, ...posts]);
+  };
+
+  const handlePostDeleted = (deletedPostId) => {
+    setPosts(posts.filter(post => post._id !== deletedPostId));
+  };
+
   return (
     <div className="App">
       <h1>My Blog</h1>
       <PostForm onPostCreated={handlePostCreated} />
-      <PostList posts={posts} />
+      <GeneratePostForm onPostGenerated={handlePostGenerated} />
+      <PostList posts={posts} onPostDeleted={handlePostDeleted} />
     </div>
   );
 }
