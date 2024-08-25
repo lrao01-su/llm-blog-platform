@@ -1,22 +1,25 @@
-import express, { Express, Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import blogRoutes from './routes/blogRoutes';
 
 dotenv.config();
 
-const app: Express = express();
-const PORT: string | number = process.env.PORT || 5001;
+const app = express();
+const PORT = process.env.PORT || 5001;
+
 app.use(cors());
 app.use(express.json());
 
-// Use blog routes
-app.use('/api/posts', blogRoutes);
+mongoose.connect(process.env.MONGODB_URI as string)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((error) => {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  });
 
-app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'Welcome to the Blog Generator API' });
-});
+app.use('/api/posts', blogRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
