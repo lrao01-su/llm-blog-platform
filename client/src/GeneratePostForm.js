@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 
 function GeneratePostForm({ onPostGenerated }) {
   const [prompt, setPrompt] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:5001/api/posts/generate', {
         method: 'POST',
@@ -18,6 +20,8 @@ function GeneratePostForm({ onPostGenerated }) {
       setPrompt('');
     } catch (error) {
       console.error('Error generating post:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -34,7 +38,9 @@ function GeneratePostForm({ onPostGenerated }) {
           required
         />
       </div>
-      <button type="submit">Generate Post</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Generating...' : 'Generate Post'}
+      </button>
     </form>
   );
 }

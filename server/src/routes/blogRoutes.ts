@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import Post from '../models/Posts';
-
+import { generateBlogPost } from '../services/openaiService';
 const router = express.Router();
 
 // GET all posts
@@ -27,17 +27,17 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// POST a new post
 router.post('/', async (req: Request, res: Response) => {
   try {
+    console.log('Received post data:', req.body); // Log received data
     const newPost = new Post(req.body);
     const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
+    console.log('Saved post:', savedPost); // Log saved post
   } catch (error) {
-    res.status(400).json({ message: 'Error creating post' });
+    console.error('Error creating post:', error); // Log detailed error
+    res.status(500).json({ message: 'Error creating post', error: error as any });
   }
 });
-
 //Delete a post by ID
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
@@ -51,11 +51,20 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// add the generate route here later
-router.post('/generate', (req: Request, res: Response) => {
-  // This is a placeholder for the LLM integration
-  res.status(501).json({ message: 'Post generation not yet implemented' });
+router.post('/generate', async (req: Request, res: Response) => {
+  try {
+    const { prompt } = req.body;
+    const generatedContent = await generateBlogPost(prompt);
+    const newPost = new Post({
+      title: prompt,
+      content: generatedContent,
+    });
+    const savedPost = await newPost.save();
+    res.status(201).json(savedPost);
+  } catch (error) {
+    console.error('Error generating post:', error);
+    res.status(500).json({ message: 'Error generating post' });
+  }
 });
-
 
 export default router;

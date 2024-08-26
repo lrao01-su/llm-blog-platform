@@ -21,15 +21,15 @@ function App() {
   };
 
   const handlePostCreated = (newPost) => {
-    setPosts([newPost, ...posts]);
+    setPosts(prevPosts => [newPost, ...prevPosts]);
   };
 
   const handlePostGenerated = (newPost) => {
-    setPosts([newPost, ...posts]);
+    setPosts(prevPosts => [newPost, ...prevPosts]);
   };
 
   const handlePostDeleted = (deletedPostId) => {
-    setPosts(posts.filter(post => post._id !== deletedPostId));
+    setPosts(prevPosts => prevPosts.filter(post => post._id !== deletedPostId));
   };
 
   return (
