@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 function PostForm({ onPostCreated }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:5001/api/posts', {
@@ -14,14 +14,17 @@ function PostForm({ onPostCreated }) {
         },
         body: JSON.stringify({ title, content }),
       });
-      const data = await response.json();
-      onPostCreated(data);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const newPost = await response.json();
+      onPostCreated(newPost);
       setTitle('');
       setContent('');
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error:', error);
     }
-  };
+  }, [title, content, onPostCreated]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -50,4 +53,4 @@ function PostForm({ onPostCreated }) {
   );
 }
 
-export default PostForm;
+export default React.memo(PostForm);

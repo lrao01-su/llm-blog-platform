@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 function GeneratePostForm({ onPostGenerated }) {
   const [prompt, setPrompt] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:5001/api/posts/generate', {
         method: 'POST',
@@ -15,15 +13,16 @@ function GeneratePostForm({ onPostGenerated }) {
         },
         body: JSON.stringify({ prompt }),
       });
-      const data = await response.json();
-      onPostGenerated(data);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const newPost = await response.json();
+      onPostGenerated(newPost);
       setPrompt('');
     } catch (error) {
-      console.error('Error generating post:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Error:', error);
     }
-  };
+  }, [prompt, onPostGenerated]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -38,11 +37,9 @@ function GeneratePostForm({ onPostGenerated }) {
           required
         />
       </div>
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Generating...' : 'Generate Post'}
-      </button>
+      <button type="submit">Generate Post</button>
     </form>
   );
 }
 
-export default GeneratePostForm;
+export default React.memo(GeneratePostForm);
