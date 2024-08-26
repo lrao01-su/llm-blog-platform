@@ -61,4 +61,15 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
+// Search posts by title
+router.get('/search', async (req: Request, res: Response) => {
+  try {
+    const { title } = req.query;
+    const posts = await Post.find({ title: new RegExp(title as string, 'i') });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: 'Error searching posts', error });
+  }
+});
+
 export default router;

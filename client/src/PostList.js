@@ -67,6 +67,7 @@ function PostList({ posts, onPostDeleted, onPostUpdated }) {
             <>
               <h3>{post.title}</h3>
               <p>{post.content}</p>
+              <p>Created: {new Date(post.createdAt).toLocaleString()}</p>
               <button onClick={() => startEditing(post)}>Edit</button>
               <button onClick={() => deletePost(post._id)}>Delete</button>
             </>
