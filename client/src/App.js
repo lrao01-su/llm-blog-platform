@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PostList from './PostList';
-//import PostForm from './PostForm';
 import GeneratePostForm from './GeneratePostForm';
 import './App.css';
 
@@ -29,11 +28,21 @@ function App() {
     setPosts(prevPosts => prevPosts.filter(post => post._id !== deletedPostId));
   }, []);
 
+  const handlePostUpdated = useCallback((updatedPost) => {
+    setPosts(prevPosts => prevPosts.map(post => 
+      post._id === updatedPost._id ? updatedPost : post
+    ));
+  }, []);
+
   return (
     <div className="App">
       <h1>AI Blog Generator</h1>
       <GeneratePostForm onPostGenerated={handlePostGenerated} />
-      <PostList posts={posts} onPostDeleted={handlePostDeleted} />
+      <PostList 
+        posts={posts} 
+        onPostDeleted={handlePostDeleted}
+        onPostUpdated={handlePostUpdated}
+      />
     </div>
   );
 }

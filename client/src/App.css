@@ -63,3 +63,26 @@ button:hover {
 .post button:hover {
   background-color: #bd2130;
 }
+
+.post input[type="text"],
+.post textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.post textarea {
+  height: 100px;
+}
+
+.post button {
+  margin-right: 10px;
+}
+
+.edit-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
