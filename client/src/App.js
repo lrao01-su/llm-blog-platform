@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PostList from './PostList';
-import PostForm from './PostForm';
+//import PostForm from './PostForm';
 import GeneratePostForm from './GeneratePostForm';
+import './App.css';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -20,10 +21,6 @@ function App() {
     fetchPosts();
   }, [fetchPosts]);
 
-  const handlePostCreated = useCallback((newPost) => {
-    setPosts(prevPosts => [newPost, ...prevPosts]);
-  }, []);
-
   const handlePostGenerated = useCallback((newPost) => {
     setPosts(prevPosts => [newPost, ...prevPosts]);
   }, []);
@@ -34,14 +31,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>My Blog</h1>
-      <PostForm onPostCreated={handlePostCreated} />
+      <h1>AI Blog Generator</h1>
       <GeneratePostForm onPostGenerated={handlePostGenerated} />
-      <PostList 
-      key={posts.length} // This will force a re-render when the number of posts changes
-      posts={posts} 
-      onPostDeleted={handlePostDeleted} 
-    />
+      <PostList posts={posts} onPostDeleted={handlePostDeleted} />
     </div>
   );
 }

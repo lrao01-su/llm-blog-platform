@@ -13,10 +13,10 @@ function PostList({ posts, onPostDeleted }) {
   }, [onPostDeleted]);
 
   return (
-    <div>
-      <h2>Blog Posts</h2>
+    <div className="post-list">
+      <h2>Generated Blog Posts</h2>
       {posts.map(post => (
-        <div key={post._id}>
+        <div key={post._id} className="post">
           <h3>{post.title}</h3>
           <p>{post.content}</p>
           <button onClick={() => deletePost(post._id)}>Delete</button>
