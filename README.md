@@ -1,7 +1,8 @@
 # AI Blog Generator
 
 ## Project Overview
-This project is a full-stack web application that allows users to generate and manage blog posts. It's built using the MERN stack (MongoDB, Express, React, Node.js) and integrates with OpenAI's API(GPT-3.5-turbo) for content generation.
+NOTE: this was a takehome interview Project I did within 48 hours in 2024.
+This project is a full-stack web application that  allows users to generate and manage blog posts. It's built using the MERN stack (MongoDB, Express, React, Node.js) and integrates with OpenAI's API(GPT-3.5-turbo) for content generation.
 
 ## Features
 - Generate blog posts using AI
